@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Did Albo Get You? — Budget 2026–27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf7;
+    --surface: #ffffff;
+    --ink: #1a1a1a;
+    --ink-2: #555;
+    --ink-3: #888;
+    --rule: #e5e5e0;
+    --rule-strong: #d0d0c8;
+    --accent: #b8341c;
+    --accent-soft: #fdf0ed;
+    --positive: #1f6b3f;
+    --positive-soft: #ecf6f0;
+    --negative: #a8231a;
+    --negative-soft: #faecea;
+    --neutral: #6b6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter Tight', sans-serif; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+    font-size: 15px;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--rule);
+    padding: 1rem 0 0.85rem;
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  .header-tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  h1 {
+    font-size: 1.7rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+  }
+  .header-sub {
+    color: var(--ink-2);
+    font-size: 0.9rem;
+    margin-top: 0.2rem;
+  }
+
+  /* Year selector */
+  .year-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--rule);
+    padding: 0.7rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .year-bar-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .year-bar-label {
+    font-size: 0.75rem;
+    color: var(--ink-2);
+    font-weight: 500;
+  }
+  .year-pills {
+    display: flex;
+    gap: 0.4rem;
+  }
+  .year-pill {
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--rule-strong);
+    background: var(--surface);
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--ink-2);
+    font-weight: 500;
+    transition: all 0.12s;
+  }
+  .year-pill:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .year-pill.active {
+    background: var(--ink);
+    color: white;
+    border-color: var(--ink);
+  }
+
+  /* Container */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  /* Form */
+  .form-col {
+    min-width: 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+    letter-spacing: -0.005em;
+  }
+  .card-desc {
+    font-size: 0.82rem;
+    color: var(--ink-2);
+    margin-bottom: 1rem;
+  }
+  .field {
+    margin-bottom: 0.85rem;
+  }
+  .field:last-child { margin-bottom: 0; }
+  .field label {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--ink-2);
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+  }
+  .field-hint {
+    font-size: 0.75rem;
+    color: var(--ink-3);
+    margin-top: 0.25rem;
+    line-height: 1.4;
+  }
+  .input-wrap { position: relative; }
+  .input-wrap.currency::before {
+    content: '$';
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-3);
+    pointer-events: none;
+    font-size: 0.9rem;
+  }
+  .input-wrap.currency input { padding-left: 1.5rem; }
+  input[type="number"], input[type="text"], select {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--rule-strong);
+    background: var(--surface);
+    font-size: 0.92rem;
+    color: var(--ink);
+    border-radius: 5px;
+    transition: all 0.12s;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--ink);
+    box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.06);
+  }
+  select { cursor: pointer; }
+
+  /* Toggle row inside card */
+  .toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    cursor: pointer;
+  }
+  .toggle input[type="checkbox"] {
+    accent-color: var(--accent);
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .toggle-label {
+    font-weight: 500;
+    font-size: 0.92rem;
+    cursor: pointer;
+  }
+  .card.toggleable .card-body {
+    display: none;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+  }
+  .card.toggleable.open .card-body { display: block; }
+  .card.toggleable .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .card.toggleable .header-text { flex: 1; }
+  .card.toggleable.open { border-color: var(--ink); }
+
+  /* Field grid for compact layouts */
+  .field-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+  }
+  @media (max-width: 600px) {
+    .field-grid-2 { grid-template-columns: 1fr; }
+  }
+
+  /* Results panel */
+  .results-col {
+    position: sticky;
+    top: 5rem;
+    align-self: start;
+  }
+  .results-card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .verdict-block {
+    padding: 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid var(--rule);
+  }
+  .verdict-block.positive { background: var(--positive-soft); }
+  .verdict-block.negative { background: var(--negative-soft); }
+  .verdict-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+  }
+  .verdict-headline {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+  .verdict-headline.positive { color: var(--positive); }
+  .verdict-headline.negative { color: var(--negative); }
+  .verdict-headline.neutral { color: var(--neutral); }
+  .delta {
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1;
+  }
+  .delta.positive { color: var(--positive); }
+  .delta.negative { color: var(--negative); }
+  .delta-sub {
+    font-size: 0.78rem;
+    color: var(--ink-2);
+    margin-top: 0.4rem;
+  }
+
+  .breakdown {
+    padding: 1rem 1.25rem 1.25rem;
+  }
+  .breakdown-title {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+  }
+  .breakdown-empty {
+    color: var(--ink-3);
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+  .item {
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.6rem;
+    align-items: start;
+  }
+  .item:last-child { border-bottom: none; }
+  .item-name {
+    font-size: 0.88rem;
+    font-weight: 500;
+    margin-bottom: 0.15rem;
+  }
+  .item-detail {
+    font-size: 0.76rem;
+    color: var(--ink-2);
+    line-height: 1.4;
+  }
+  .item-amount {
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .item-amount.positive { color: var(--positive); }
+  .item-amount.negative { color: var(--negative); }
+  .item-amount.neutral { color: var(--ink-3); font-weight: 500; font-size: 0.78rem; }
+
+  /* Footer notes */
+  .notes {
+    margin-top: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+  .notes summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.88rem;
+  }
+  .notes[open] summary { margin-bottom: 0.7rem; }
+  .notes ul {
+    padding-left: 1.2rem;
+    font-size: 0.8rem;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+  .notes li { margin-bottom: 0.3rem; }
+  .notes strong { color: var(--ink); }
+
+  .footer {
+    max-width: 1100px;
+    margin: 2rem auto 0;
+    padding: 1rem 1.5rem 2rem;
+    font-size: 0.75rem;
+    color: var(--ink-3);
+    line-height: 1.5;
+    border-top: 1px solid var(--rule);
+  }
+
+  /* Mobile */
+  @media (max-width: 880px) {
+    .container { grid-template-columns: 1fr; }
+    .results-col { position: static; }
+    h1 { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-tag">Federal Budget 2026–27 · 12 May 2026</div>
+    <h1>Did Albo get you?</h1>
+    <p class="header-sub">Enter your situation. The right-hand panel updates live.</p>
+  </div>
+</header>
+
+<div class="year-bar">
+  <div class="year-bar-inner">
+    <span class="year-bar-label">Modelling year:</span>
+    <div class="year-pills">
+      <button class="year-pill" data-year="2026">FY 2026–27</button>
+      <button class="year-pill active" data-year="2027">FY 2027–28</button>
+      <button class="year-pill" data-year="2028">FY 2028–29+</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <main class="form-col">
+
+    <!-- 1. Income -->
+    <div class="card">
+      <div class="card-title">Your income</div>
+      <div class="card-desc">Wages, salary or business income. Used for tax brackets, LITO and WATO eligibility.</div>
+
+      <div class="field">
+        <label for="income">Annual income from work</label>
+        <div class="input-wrap currency">
+          <input type="number" id="income" min="0" step="1000" value="80000" />
+        </div>
+      </div>
+
+      <div class="field-grid-2">
+        <div class="field">
+          <label for="workExpenses">Work deductions you currently claim on your return</label>
+          <div class="input-wrap currency">
+            <input type="number" id="workExpenses" min="0" step="100" value="0" />
+          </div>
+          <div class="field-hint">From 2026–27 you can claim up to $1,000 with no receipts. If you currently claim less than that, the gap becomes a free deduction.</div>
+        </div>
+
+        <div class="field">
+          <label for="age">Age</label>
+          <input type="number" id="age" min="0" max="120" step="1" value="30" />
+          <div class="field-hint">For LITO and the 65+ health rebate.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Property -->
+    <div class="card toggleable" id="card-property">
+      <div class="card-header">
+        <label class="toggle header-text">
+          <input type="checkbox" id="ownsProperty" />
+          <div>
+            <div class="toggle-label">Investment property</div>
+            <div class="card-desc" style="margin: 0.1rem 0 0;">Negative gearing and CGT changes apply from 1 July 2027.</div>
+          </div>
+        </label>
+      </div>
+
+      <div class="card-body">
+        <div class="field">
+          <label for="propStatus">When was / will the property be acquired?</label>
+          <select id="propStatus">
+            <option value="before">Held before 7:30pm 12 May 2026 — grandfathered</option>
+            <option value="transitional">Established, bought between Budget night and 30 June 2027</option>
+            <option value="established_new">Established, bought from 1 July 2027 onwards</option>
+            <option value="newbuild_new">New build (any time)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="rentalLoss">Annual net rental loss</label>
+          <div class="input-wrap currency">
+            <input type="number" id="rentalLoss" min="0" step="500" value="12000" />
+          </div>
+          <div class="field-hint">Positive number. The amount you'd deduct against other income today.</div>
+        </div>
+
+        <div class="card-desc" style="margin: 1rem 0 0.6rem; font-weight: 500; color: var(--ink);">If selling after 1 July 2027:</div>
+
+        <div class="field-grid-2">
+          <div class="field">
+            <label for="costBase">Original cost base</label>
+            <div class="input-wrap currency">
+              <input type="number" id="costBase" min="0" step="10000" value="0" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="salePrice">Expected sale price</label>
+            <div class="input-wrap currency">
+              <input type="number" id="salePrice" min="0" step="10000" value="0" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="cgHoldYears">Years held at sale</label>
+            <input type="number" id="cgHoldYears" min="0" step="1" value="0" />
+          </div>
+          <div class="field">
+            <label for="avgInflation">Avg inflation over hold (%)</label>
+            <input type="number" id="avgInflation" min="0" max="20" step="0.1" value="2.8" />
+          </div>
+        </div>
+        <div class="field-hint" style="margin-top: 0.3rem;">Leave at 0 if you're not modelling a sale.</div>
+      </div>
+    </div>
+
+    <!-- 3. Trust -->
+    <div class="card toggleable" id="card-trust">
+      <div class="card-header">
+        <label class="toggle header-text">
+          <input type="checkbox" id="hasTrust" />
+          <div>
+            <div class="toggle-label">Discretionary (family) trust</div>
+            <div class="card-desc" style="margin: 0.1rem 0 0;">30% minimum trustee tax from 1 July 2028.</div>
+          </div>
+        </label>
+      </div>
+
+      <div class="card-body">
+        <div class="field">
+          <label for="trustTotal">Total taxable income of the trust</label>
+          <div class="input-wrap currency">
+            <input type="number" id="trustTotal" min="0" step="1000" value="0" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="trustDist">Of that, your distribution</label>
+          <div class="input-wrap currency">
+            <input type="number" id="trustDist" min="0" step="1000" value="0" />
+          </div>
+          <div class="field-hint">This is on top of your work income above.</div>
+        </div>
+
+        <div class="card-desc" style="margin: 1rem 0 0.6rem; font-weight: 500; color: var(--ink);">Other beneficiaries (e.g. spouse + adult kids):</div>
+
+        <div class="field-grid-2">
+          <div class="field">
+            <label for="trustOtherCount">How many other beneficiaries?</label>
+            <input type="number" id="trustOtherCount" min="0" max="10" step="1" value="0" />
+            <div class="field-hint">Set to 0 if you're the only beneficiary.</div>
+          </div>
+          <div class="field">
+            <label for="trustOtherDist">Their combined trust distributions</label>
+            <div class="input-wrap currency">
+              <input type="number" id="trustOtherDist" min="0" step="1000" value="0" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="trustOtherBenefs">Their combined other income</label>
+            <div class="input-wrap currency">
+              <input type="number" id="trustOtherBenefs" min="0" step="1000" value="0" />
+            </div>
+            <div class="field-hint">Split evenly across the beneficiaries above.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. EV -->
+    <div class="card toggleable" id="card-ev">
+      <div class="card-header">
+        <label class="toggle header-text">
+          <input type="checkbox" id="hasEV" />
+          <div>
+            <div class="toggle-label">Novated lease on an EV</div>
+            <div class="card-desc" style="margin: 0.1rem 0 0;">Full FBT exemption transitions to a 25% discount in 2027 and 2029.</div>
+          </div>
+        </label>
+      </div>
+
+      <div class="card-body">
+        <div class="field-grid-2">
+          <div class="field">
+            <label for="evValue">EV cost</label>
+            <div class="input-wrap currency">
+              <input type="number" id="evValue" min="0" step="5000" value="65000" />
+            </div>
+            <div class="field-hint">Must be under $91,387 for any concession.</div>
+          </div>
+          <div class="field">
+            <label for="evDate">Lease start date</label>
+            <select id="evDate">
+              <option value="before_apr27">Before 1 April 2027</option>
+              <option value="apr27_to_apr29">1 April 2027 – 1 April 2029</option>
+              <option value="after_apr29">On or after 1 April 2029</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. PHI -->
+    <div class="card toggleable" id="card-phi">
+      <div class="card-header">
+        <label class="toggle header-text">
+          <input type="checkbox" id="hasPHI" />
+          <div>
+            <div class="toggle-label">Private health insurance (65+)</div>
+            <div class="card-desc" style="margin: 0.1rem 0 0;">Age-based premium rebate is being removed.</div>
+          </div>
+        </label>
+      </div>
+
+      <div class="card-body">
+        <div class="field">
+          <label for="phiCover">Level of cover</label>
+          <select id="phiCover">
+            <option value="basic">Basic hospital only (~$226/yr)</option>
+            <option value="mid">Mid-tier hospital + extras (~$430/yr)</option>
+            <option value="top">Top hospital + comprehensive extras (~$640/yr)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Fuel -->
+    <div class="card toggleable" id="card-fuel">
+      <div class="card-header">
+        <label class="toggle header-text">
+          <input type="checkbox" id="hasCar" />
+          <div>
+            <div class="toggle-label">Petrol/diesel vehicle</div>
+            <div class="card-desc" style="margin: 0.1rem 0 0;">Fuel excise halved for 3 months from Budget night.</div>
+          </div>
+        </label>
+      </div>
+
+      <div class="card-body">
+        <div class="field-grid-2">
+          <div class="field">
+            <label for="kmPerYear">Annual distance (km)</label>
+            <input type="number" id="kmPerYear" min="0" step="1000" value="15000" />
+          </div>
+          <div class="field">
+            <label for="fuelEcon">Consumption (L / 100km)</label>
+            <input type="number" id="fuelEcon" min="0" step="0.1" value="8.5" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Super -->
+    <div class="card toggleable" id="card-super">
+      <div class="card-header">
+        <label class="toggle header-text">
+          <input type="checkbox" id="hasSuper" />
+          <div>
+            <div class="toggle-label">Super balance over $3m (Div 296)</div>
+            <div class="card-desc" style="margin: 0.1rem 0 0;">Already legislated. +15% on earnings above $3m, +25% above $10m from 1 July 2026.</div>
+          </div>
+        </label>
+      </div>
+
+      <div class="card-body">
+        <div class="field-grid-2">
+          <div class="field">
+            <label for="superBal">Total super balance</label>
+            <div class="input-wrap currency">
+              <input type="number" id="superBal" min="0" step="50000" value="3500000" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="superReturn">Annual earnings rate (%)</label>
+            <input type="number" id="superReturn" min="0" max="50" step="0.1" value="7" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- RESULTS -->
+  <aside class="results-col">
+    <div class="results-card">
+      <div class="verdict-block" id="verdictBlock">
+        <div class="verdict-label" id="yearLabel">Modelling FY 2027–28 vs 2025–26</div>
+        <div class="verdict-headline neutral" id="verdict">Enter your situation</div>
+        <div class="delta" id="delta">$0</div>
+        <div class="delta-sub" id="deltaSub">net annual change</div>
+      </div>
+
+      <div class="breakdown">
+        <div class="breakdown-title">Itemised changes</div>
+        <div id="breakdown">
+          <div class="breakdown-empty">No items yet</div>
+        </div>
+      </div>
+    </div>
+
+    <details class="notes">
+      <summary>How this works</summary>
+      <ul>
+        <li><strong>Tax rates:</strong> 2025–26 baseline = 16% on $18,201–$45,000. 2026–27 = 15%. 2027–28+ = 14%.</li>
+        <li><strong>LITO:</strong> $700 max, tapers 5c/$ then 1.5c/$, gone at $66,667. Applied to both before and after.</li>
+        <li><strong>$1,000 instant deduction:</strong> From 2026–27. Worth (1,000 − your existing claims) × marginal rate.</li>
+        <li><strong>$250 WATO:</strong> Non-refundable offset from 2027–28 for income from work.</li>
+        <li><strong>Negative gearing:</strong> Quarantined losses valued at your marginal rate.</li>
+        <li><strong>CGT:</strong> Old = 50% discount. New = indexed cost base with 30% min tax on the real gain. Annualised over years held.</li>
+        <li><strong>Trust:</strong> Compares per-beneficiary tax under flow-through (income split evenly across beneficiaries) vs trustee 30% minimum with non-refundable credits. The reform bites when distributions go to multiple low-rate beneficiaries.</li>
+        <li><strong>EV FBT:</strong> Annual benefit lost ≈ 19.5% of vehicle value × 75% (25% discount remains).</li>
+        <li><strong>Not financial advice.</strong> Excludes HECS/HELP, MLS, franking, SAPTO, state taxes.</li>
+      </ul>
+    </details>
+  </aside>
+</div>
+
+<footer class="footer">
+  Sources: budget.gov.au, Treasury budget papers, pm.gov.au, professional firm summaries (Deloitte, PwC, BT, Pitcher Partners, Corrs, Mallesons, Holding Redlich), CA ANZ, SuperGuide. Calculations are simplified and for orientation only — consult a registered tax agent for decisions.
+</footer>
+
+<script>
+//==============================================================
+// Calculation engine
+//==============================================================
+
+function bracketsForYear(year) {
+  let r;
+  if (year <= 2025) r = 0.16;
+  else if (year === 2026) r = 0.15;
+  else r = 0.14;
+  const b45  = r * (45000 - 18200);
+  const b135 = b45  + 0.30 * (135000 - 45000);
+  const b190 = b135 + 0.37 * (190000 - 135000);
+  return [
+    { upTo: 18200,    rate: 0,    base: 0   },
+    { upTo: 45000,    rate: r,    base: 0   },
+    { upTo: 135000,   rate: 0.30, base: b45 },
+    { upTo: 190000,   rate: 0.37, base: b135},
+    { upTo: Infinity, rate: 0.45, base: b190}
+  ];
+}
+
+function calcTax(income, brackets) {
+  if (income <= 0) return 0;
+  for (let i = 0; i < brackets.length; i++) {
+    const b = brackets[i];
+    const prev = i === 0 ? 0 : brackets[i-1].upTo;
+    if (income <= b.upTo) return b.base + (income - prev) * b.rate;
+  }
+  return 0;
+}
+
+function marginalRate(income, brackets) {
+  for (const b of brackets) if (income <= b.upTo) return b.rate;
+  return 0.45;
+}
+
+function lito(income) {
+  if (income <= 37500) return 700;
+  if (income <= 45000) return Math.max(0, 700 - (income - 37500) * 0.05);
+  if (income <= 66667) return Math.max(0, 325 - (income - 45000) * 0.015);
+  return 0;
+}
+
+const fmt = n => '$' + Math.abs(Math.round(n)).toLocaleString('en-AU');
+const fmtSigned = n => (n > 0 ? '+' : (n < 0 ? '−' : '')) + fmt(n);
+
+let selectedYear = 2027;
+
+function readInputs() {
+  const $ = id => document.getElementById(id);
+  return {
+    year: selectedYear,
+    income:           +$('income').value || 0,
+    workExpenses:     +$('workExpenses').value || 0,
+    age:              +$('age').value || 0,
+    ownsProperty:     $('ownsProperty').checked,
+    propStatus:       $('propStatus').value,
+    rentalLoss:       +$('rentalLoss').value || 0,
+    costBase:         +$('costBase').value || 0,
+    salePrice:        +$('salePrice').value || 0,
+    cgHoldYears:      +$('cgHoldYears').value || 0,
+    avgInflation:     (+$('avgInflation').value || 0) / 100,
+    hasTrust:         $('hasTrust').checked,
+    trustDist:        +$('trustDist').value || 0,
+    trustTotal:       +$('trustTotal').value || 0,
+    trustOtherCount:  +$('trustOtherCount').value || 0,
+    trustOtherBenefs: +$('trustOtherBenefs').value || 0,
+    trustOtherDist:   +$('trustOtherDist').value || 0,
+    hasEV:            $('hasEV').checked,
+    evDate:           $('evDate').value,
+    evValue:          +$('evValue').value || 0,
+    hasPHI:           $('hasPHI').checked,
+    phiCover:         $('phiCover').value,
+    hasCar:           $('hasCar').checked,
+    kmPerYear:        +$('kmPerYear').value || 0,
+    fuelEcon:         +$('fuelEcon').value || 0,
+    hasSuper:         $('hasSuper').checked,
+    superBal:         +$('superBal').value || 0,
+    superReturn:      (+$('superReturn').value || 0) / 100,
+  };
+}
+
+function calculate(inp) {
+  const items = [];
+  const bBase = bracketsForYear(2025);
+  const bYear = bracketsForYear(inp.year);
+
+  // 1. Personal income tax
+  const taxBase = Math.max(0, calcTax(inp.income, bBase) - lito(inp.income));
+  let taxYear = Math.max(0, calcTax(inp.income, bYear) - lito(inp.income));
+  const rateDelta = taxBase - taxYear;
+
+  if (Math.abs(rateDelta) > 0.5) {
+    const rt = inp.year === 2026 ? '16% → 15%' : '16% → 14%';
+    const maxB = inp.year === 2026 ? 268 : 536;
+    items.push({
+      name: 'Personal tax rate cut',
+      detail: `Bracket rate ${rt} on $18,201–$45,000. Max $${maxB} for income ≥$45k.`,
+      amount: rateDelta,
+      type: rateDelta > 0 ? 'positive' : 'neutral'
+    });
+  }
+
+  // 2. $1k instant deduction (from 2026-27)
+  // From 2026-27, taxpayers can claim up to $1,000 of work-related expenses without
+  // substantiation. The benefit equals the amount this raises their claim by, times
+  // their marginal rate. Treasury's $205 average benefit reflects ~6.2m taxpayers
+  // currently underclaiming.
+  let instantBenefit = 0;
+  if (inp.year >= 2026 && inp.income > 18200) {
+    const extra = Math.max(0, 1000 - inp.workExpenses);
+    const mr = marginalRate(inp.income, bYear);
+    instantBenefit = extra * mr;
+    taxYear = Math.max(0, taxYear - instantBenefit);
+    if (instantBenefit > 0.5) {
+      items.push({
+        name: '$1,000 instant deduction',
+        detail: `You claim ${fmt(inp.workExpenses)} today. The new rule lets you claim $1,000 without receipts — an extra ${fmt(extra)} deduction at ${(mr*100).toFixed(0)}% marginal.`,
+        amount: instantBenefit,
+        type: 'positive'
+      });
+    } else if (inp.workExpenses >= 1000) {
+      items.push({
+        name: '$1,000 instant deduction',
+        detail: `You already claim ${fmt(inp.workExpenses)} — keep claiming the higher amount with receipts. No extra benefit.`,
+        amount: 0, type: 'neutral'
+      });
+    }
+  }
+
+  // 3. WATO (from 2027-28)
+  if (inp.year >= 2027 && inp.income > 18200 && taxYear > 0) {
+    const w = Math.min(250, taxYear);
+    taxYear = Math.max(0, taxYear - w);
+    items.push({
+      name: '$250 Working Australians Tax Offset',
+      detail: 'Permanent $250 offset for income from work, from FY 2027–28.',
+      amount: w,
+      type: 'positive'
+    });
+  }
+
+  const personalDelta = taxBase - taxYear;
+
+  // 4. Negative gearing
+  let negGearDelta = 0;
+  if (inp.ownsProperty && inp.rentalLoss > 0) {
+    if (inp.propStatus === 'before') {
+      items.push({ name: 'Neg. gearing — grandfathered', detail: 'Held before 12 May 2026 — fully grandfathered.', amount: 0, type: 'neutral' });
+    } else if (inp.propStatus === 'newbuild_new') {
+      items.push({ name: 'Neg. gearing — new build', detail: 'New builds keep full negative gearing under the new rules.', amount: 0, type: 'neutral' });
+    } else if (inp.propStatus === 'transitional') {
+      if (inp.year >= 2027) {
+        const mr = marginalRate(inp.income, bYear);
+        negGearDelta = -inp.rentalLoss * mr;
+        items.push({
+          name: 'Negative gearing quarantined',
+          detail: `Transitional purchase. From 1 July 2027 your ${fmt(inp.rentalLoss)} loss can't offset other income — value lost ≈ ${fmt(inp.rentalLoss * mr)}.`,
+          amount: negGearDelta, type: 'negative'
+        });
+      } else {
+        items.push({
+          name: 'Neg. gearing — transitional period',
+          detail: 'Until 30 June 2027 you still deduct against other income.',
+          amount: 0, type: 'neutral'
+        });
+      }
+    } else if (inp.propStatus === 'established_new') {
+      if (inp.year >= 2027) {
+        const mr = marginalRate(inp.income, bYear);
+        negGearDelta = -inp.rentalLoss * mr;
+        items.push({
+          name: 'Negative gearing quarantined',
+          detail: `Established post-1 July 2027 purchase. ${fmt(inp.rentalLoss)} loss can only offset rental/CGT income — value lost ≈ ${fmt(inp.rentalLoss * mr)}.`,
+          amount: negGearDelta, type: 'negative'
+        });
+      } else {
+        items.push({ name: 'Neg. gearing — kicks in 2027–28', detail: 'No effect yet in your selected year.', amount: 0, type: 'neutral' });
+      }
+    }
+  }
+
+  // 5. CGT
+  let cgtDelta = 0;
+  if (inp.ownsProperty && inp.salePrice > 0 && inp.costBase > 0 && inp.cgHoldYears > 0 && inp.year >= 2027) {
+    const nom = inp.salePrice - inp.costBase;
+    if (nom > 0) {
+      const discounted = nom * 0.5;
+      const taxPre = calcTax(inp.income + discounted, bBase) - calcTax(inp.income, bBase);
+      const indexed = inp.costBase * Math.pow(1 + inp.avgInflation, inp.cgHoldYears);
+      const real = Math.max(0, inp.salePrice - indexed);
+      const mTaxReal = calcTax(inp.income + real, bYear) - calcTax(inp.income, bYear);
+      const minTaxReal = real * 0.30;
+      const taxPost = Math.max(mTaxReal, minTaxReal);
+      cgtDelta = (taxPre - taxPost) / inp.cgHoldYears;
+      items.push({
+        name: 'CGT on sale (annualised)',
+        detail: `Nominal gain ${fmt(nom)}. New rules: indexed cost base ${fmt(indexed)}, real gain ${fmt(real)}, 30% min tax floor. Spread over ${inp.cgHoldYears} years.`,
+        amount: cgtDelta,
+        type: cgtDelta >= 0 ? 'positive' : 'negative'
+      });
+    }
+  }
+
+  // 6. Trust (from 2028-29)
+  let trustDelta = 0;
+  if (inp.hasTrust && inp.trustTotal > 0) {
+    const totalDistributed = inp.trustDist + inp.trustOtherDist;
+    if (totalDistributed > inp.trustTotal) {
+      items.push({
+        name: '⚠ Trust inputs inconsistent',
+        detail: `Distributions (${fmt(totalDistributed)}) exceed trust total (${fmt(inp.trustTotal)}). Reduce distributions or raise the total. Trust calc skipped.`,
+        amount: 0, type: 'neutral'
+      });
+    } else if (inp.year >= 2028) {
+      const retained = inp.trustTotal - inp.trustDist - inp.trustOtherDist;
+      const retainedTax = retained * 0.45;
+
+      // Per-beneficiary tax (using year brackets for both pre and post to isolate
+      // the policy effect from the rate-cut effect already counted in personal tax)
+      const youTaxOnDist = calcTax(inp.income + inp.trustDist, bYear) - calcTax(inp.income, bYear);
+
+      // Split "other beneficiaries" across N people evenly
+      const n = Math.max(0, inp.trustOtherCount);
+      let othersTaxPre = 0;
+      if (n > 0 && inp.trustOtherDist > 0) {
+        const perPersonBase = inp.trustOtherBenefs / n;
+        const perPersonDist = inp.trustOtherDist / n;
+        const perPersonTax  = calcTax(perPersonBase + perPersonDist, bYear) - calcTax(perPersonBase, bYear);
+        othersTaxPre = perPersonTax * n;
+      }
+      const trustPre = youTaxOnDist + othersTaxPre + retainedTax;
+
+      // Post: trustee pays 30% min tax; non-refundable credits passed to beneficiaries
+      const minTax = inp.trustTotal * 0.30;
+      const youCredit = (inp.trustDist / inp.trustTotal) * minTax;
+      const youNet    = Math.max(youTaxOnDist, youCredit);
+
+      let othersNet = 0;
+      if (n > 0 && inp.trustOtherDist > 0) {
+        const perPersonBase = inp.trustOtherBenefs / n;
+        const perPersonDist = inp.trustOtherDist / n;
+        const perPersonRaw  = calcTax(perPersonBase + perPersonDist, bYear) - calcTax(perPersonBase, bYear);
+        const perPersonCredit = (perPersonDist / inp.trustTotal) * minTax;
+        const perPersonNet = Math.max(perPersonRaw, perPersonCredit);
+        othersNet = perPersonNet * n;
+      }
+      const trustPost = youNet + othersNet + retainedTax;
+      trustDelta = trustPre - trustPost;
+
+      if (Math.abs(trustDelta) > 0.5) {
+        items.push({
+          name: 'Trust 30% min tax',
+          detail: `Trust income ${fmt(inp.trustTotal)} now taxed at 30% min at the trustee. ${trustDelta < 0 ? 'Splitting to low-rate beneficiaries no longer cuts the tax bill.' : ''}`,
+          amount: trustDelta,
+          type: trustDelta >= 0 ? 'positive' : 'negative'
+        });
+      } else {
+        items.push({
+          name: 'Trust 30% min tax — no impact',
+          detail: 'All beneficiaries are already on marginal rates ≥30% (or there are no others to split with), so the minimum tax doesn\'t bite for you.',
+          amount: 0, type: 'neutral'
+        });
+      }
+    } else {
+      items.push({ name: 'Trust min tax — from 2028–29', detail: 'Switch to FY 2028–29+ to model.', amount: 0, type: 'neutral' });
+    }
+  }
+
+  // 7. EV FBT
+  let evDelta = 0;
+  if (inp.hasEV && inp.evValue > 0) {
+    if (inp.evValue > 91387) {
+      items.push({ name: 'EV above luxury car limit', detail: 'Exceeds $91,387 — no FBT concession available.', amount: 0, type: 'neutral' });
+    } else {
+      const fullExempt = inp.evValue * 0.195;
+      const lost = fullExempt * 0.75;
+      const over75 = inp.evValue > 75000;
+      let applies = false, detail = '';
+      if (inp.evDate === 'before_apr27') {
+        detail = 'Lease pre-1 April 2027 — full exemption retained for life of lease.';
+      } else if (inp.evDate === 'apr27_to_apr29') {
+        if (over75) { applies = true; detail = `Vehicle >$75k and lease starts after 1 April 2027. Full exemption lost.`; }
+        else { detail = 'Vehicle ≤$75k and lease starts before 1 April 2029 — full exemption retained.'; }
+      } else {
+        applies = true; detail = 'Lease starts on/after 1 April 2029 — full exemption lost.';
+      }
+      if (applies) {
+        evDelta = -lost;
+        items.push({ name: 'EV FBT exemption reduced', detail, amount: evDelta, type: 'negative' });
+      } else {
+        items.push({ name: 'EV FBT — still exempt', detail, amount: 0, type: 'neutral' });
+      }
+    }
+  }
+
+  // 8. PHI
+  let phiDelta = 0;
+  if (inp.hasPHI && inp.age >= 65) {
+    phiDelta = { basic: -226, mid: -430, top: -640 }[inp.phiCover] || 0;
+    items.push({
+      name: 'Health rebate reduced (65+)',
+      detail: 'Age-based premium on the rebate is being removed.',
+      amount: phiDelta, type: 'negative'
+    });
+  }
+
+  // 9. Fuel
+  let fuelDelta = 0;
+  if (inp.hasCar && inp.kmPerYear > 0 && inp.fuelEcon > 0) {
+    const litres = inp.kmPerYear * inp.fuelEcon / 100;
+    fuelDelta = litres * 0.25 * (3/12);
+    items.push({
+      name: 'Fuel excise halved (3 months)',
+      detail: `~25c/L × 3 months on ${Math.round(litres)} L/yr — one-off.`,
+      amount: fuelDelta, type: 'positive'
+    });
+  }
+
+  // 10. Div 296
+  let divDelta = 0;
+  if (inp.hasSuper && inp.superBal > 3000000 && inp.year >= 2026) {
+    const e = inp.superBal * inp.superReturn;
+    const t1Share = (Math.min(inp.superBal, 10000000) - 3000000) / inp.superBal;
+    const t1Tax = e * t1Share * 0.15;
+    let t2Tax = 0;
+    if (inp.superBal > 10000000) {
+      const t2Share = (inp.superBal - 10000000) / inp.superBal;
+      t2Tax = e * t2Share * 0.25;
+    }
+    divDelta = -(t1Tax + t2Tax);
+    items.push({
+      name: 'Div 296 high-balance super tax',
+      detail: `Extra 15% on earnings tied to balance above $3m (25% above $10m). Estimated on ${fmt(e)} earnings.`,
+      amount: divDelta, type: 'negative'
+    });
+  }
+
+  const total = personalDelta + negGearDelta + cgtDelta + trustDelta + evDelta + phiDelta + fuelDelta + divDelta;
+  return { items, total };
+}
+
+function render() {
+  const inp = readInputs();
+  const r = calculate(inp);
+
+  const yLabel = inp.year === 2026 ? 'FY 2026–27' : (inp.year === 2027 ? 'FY 2027–28' : 'FY 2028–29+');
+  document.getElementById('yearLabel').textContent = `Modelling ${yLabel} vs 2025–26 baseline`;
+
+  const verdict = document.getElementById('verdict');
+  const delta = document.getElementById('delta');
+  const verdictBlock = document.getElementById('verdictBlock');
+  const t = r.total;
+
+  verdictBlock.className = 'verdict-block';
+  if (Math.abs(t) < 5) {
+    verdict.textContent = 'About even';
+    verdict.className = 'verdict-headline neutral';
+    delta.textContent = '$0';
+    delta.className = 'delta';
+  } else if (t > 0) {
+    verdict.textContent = 'You\'re better off';
+    verdict.className = 'verdict-headline positive';
+    verdictBlock.classList.add('positive');
+    delta.textContent = '+' + fmt(t);
+    delta.className = 'delta positive';
+  } else {
+    verdict.textContent = 'You\'re worse off';
+    verdict.className = 'verdict-headline negative';
+    verdictBlock.classList.add('negative');
+    delta.textContent = '−' + fmt(t);
+    delta.className = 'delta negative';
+  }
+
+  const bk = document.getElementById('breakdown');
+  if (r.items.length === 0) {
+    bk.innerHTML = '<div class="breakdown-empty">No applicable changes yet</div>';
+  } else {
+    bk.innerHTML = r.items.map(it => {
+      const cls = it.amount > 0 ? 'positive' : (it.amount < 0 ? 'negative' : 'neutral');
+      const txt = Math.abs(it.amount) < 1 ? 'no impact' : fmtSigned(it.amount);
+      return `<div class="item">
+        <div>
+          <div class="item-name">${it.name}</div>
+          <div class="item-detail">${it.detail}</div>
+        </div>
+        <div class="item-amount ${cls}">${txt}</div>
+      </div>`;
+    }).join('');
+  }
+}
+
+// Wire up toggle cards
+function setupToggle(cbId, cardId) {
+  const cb = document.getElementById(cbId);
+  const card = document.getElementById(cardId);
+  function update() {
+    if (cb.checked) card.classList.add('open');
+    else card.classList.remove('open');
+    render();
+  }
+  cb.addEventListener('change', update);
+  update();
+}
+setupToggle('ownsProperty', 'card-property');
+setupToggle('hasTrust', 'card-trust');
+setupToggle('hasEV', 'card-ev');
+setupToggle('hasPHI', 'card-phi');
+setupToggle('hasCar', 'card-fuel');
+setupToggle('hasSuper', 'card-super');
+
+// Live update on input
+document.querySelectorAll('input, select').forEach(el => {
+  el.addEventListener('input', render);
+  el.addEventListener('change', render);
+});
+
+// Year selector
+document.querySelectorAll('.year-pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.year-pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedYear = +btn.dataset.year;
+    render();
+  });
+});
+
+render();
+</script>
+</body>
+</html>
