@@ -466,6 +466,18 @@
             <div class="input-wrap currency">
               <input type="number" id="costBase" min="0" step="10000" value="0" />
             </div>
+            <div class="field-hint">Purchase price + stamp duty, legal fees, etc.</div>
+          </div>
+          <div class="field">
+            <label for="purchaseYear">Year purchased</label>
+            <input type="number" id="purchaseYear" min="1985" max="2030" step="1" value="2020" />
+          </div>
+          <div class="field">
+            <label for="valueAt2027">Value at 1 July 2027</label>
+            <div class="input-wrap currency">
+              <input type="number" id="valueAt2027" min="0" step="10000" value="0" />
+            </div>
+            <div class="field-hint">Leave 0 to use the ATO growth-rate apportionment.</div>
           </div>
           <div class="field">
             <label for="salePrice">Expected sale price</label>
@@ -474,15 +486,16 @@
             </div>
           </div>
           <div class="field">
-            <label for="cgHoldYears">Years held at sale</label>
-            <input type="number" id="cgHoldYears" min="0" step="1" value="0" />
+            <label for="saleYear">Year of sale</label>
+            <input type="number" id="saleYear" min="2027" max="2060" step="1" value="2032" />
           </div>
           <div class="field">
-            <label for="avgInflation">Avg inflation over hold (%)</label>
-            <input type="number" id="avgInflation" min="0" max="20" step="0.1" value="2.8" />
+            <label for="avgInflation">CPI inflation 2027 → sale (%/yr)</label>
+            <input type="number" id="avgInflation" min="0" max="20" step="0.1" value="2.5" />
+            <div class="field-hint">Treasury's medium-term assumption is 2.5%.</div>
           </div>
         </div>
-        <div class="field-hint" style="margin-top: 0.3rem;">Leave at 0 if you're not modelling a sale.</div>
+        <div class="field-hint" style="margin-top: 0.3rem;">Leave all sale fields at 0 if you're not modelling a sale. Assets held entirely after 1 July 2027 don't get the 50% discount portion.</div>
       </div>
     </div>
 
@@ -678,7 +691,7 @@
         <li><strong>$1,000 instant deduction:</strong> From 2026–27. Worth (1,000 − your existing claims) × marginal rate.</li>
         <li><strong>$250 WATO:</strong> Non-refundable offset from 2027–28 for income from work.</li>
         <li><strong>Negative gearing:</strong> Quarantined losses valued at your marginal rate.</li>
-        <li><strong>CGT:</strong> Old = 50% discount. New = indexed cost base with 30% min tax on the real gain. Annualised over years held.</li>
+        <li><strong>CGT (assets bought before 1 July 2027):</strong> Gain splits in two. Pre-2027 portion = (1 July 2027 value − cost base), 50% discount still applies, marginal rate. Post-2027 portion = (sale price − indexed 1 July 2027 value), 30% min tax floor. If you don't have a 1 July 2027 valuation, the calculator uses an ATO-style growth-rate apportionment.</li>
         <li><strong>Trust:</strong> Compares per-beneficiary tax under flow-through (income split evenly across beneficiaries) vs trustee 30% minimum with non-refundable credits. The reform bites when distributions go to multiple low-rate beneficiaries.</li>
         <li><strong>EV FBT:</strong> Annual benefit lost ≈ 19.5% of vehicle value × 75% (25% discount remains).</li>
         <li><strong>Not financial advice.</strong> Excludes HECS/HELP, MLS, franking, SAPTO, state taxes.</li>
@@ -751,8 +764,10 @@ function readInputs() {
     propStatus:       $('propStatus').value,
     rentalLoss:       +$('rentalLoss').value || 0,
     costBase:         +$('costBase').value || 0,
+    purchaseYear:     +$('purchaseYear').value || 0,
+    valueAt2027:      +$('valueAt2027').value || 0,
     salePrice:        +$('salePrice').value || 0,
-    cgHoldYears:      +$('cgHoldYears').value || 0,
+    saleYear:         +$('saleYear').value || 0,
     avgInflation:     (+$('avgInflation').value || 0) / 100,
     hasTrust:         $('hasTrust').checked,
     trustDist:        +$('trustDist').value || 0,
@@ -874,22 +889,62 @@ function calculate(inp) {
     }
   }
 
-  // 5. CGT
+  // 5. CGT — split treatment for assets straddling 1 July 2027
   let cgtDelta = 0;
-  if (inp.ownsProperty && inp.salePrice > 0 && inp.costBase > 0 && inp.cgHoldYears > 0 && inp.year >= 2027) {
-    const nom = inp.salePrice - inp.costBase;
-    if (nom > 0) {
-      const discounted = nom * 0.5;
-      const taxPre = calcTax(inp.income + discounted, bBase) - calcTax(inp.income, bBase);
-      const indexed = inp.costBase * Math.pow(1 + inp.avgInflation, inp.cgHoldYears);
-      const real = Math.max(0, inp.salePrice - indexed);
-      const mTaxReal = calcTax(inp.income + real, bYear) - calcTax(inp.income, bYear);
-      const minTaxReal = real * 0.30;
-      const taxPost = Math.max(mTaxReal, minTaxReal);
-      cgtDelta = (taxPre - taxPost) / inp.cgHoldYears;
+  if (inp.ownsProperty && inp.salePrice > 0 && inp.costBase > 0 && inp.saleYear >= 2027 && inp.purchaseYear > 0 && inp.year >= 2027) {
+    const nominalGain = inp.salePrice - inp.costBase;
+    if (nominalGain > 0) {
+      // Determine 1 July 2027 value
+      // If user provided one, use it. Otherwise, use ATO-style growth-rate apportionment:
+      // assume constant CAGR over the hold period from purchase to sale.
+      let val2027 = inp.valueAt2027;
+      const totalHold = inp.saleYear - inp.purchaseYear;
+      const yearsBefore2027 = Math.max(0, 2027 - inp.purchaseYear);
+      const yearsAfter2027 = Math.max(0, inp.saleYear - 2027);
+
+      if (val2027 <= 0 && totalHold > 0) {
+        // CAGR-based apportionment
+        const cagr = Math.pow(inp.salePrice / inp.costBase, 1 / totalHold) - 1;
+        val2027 = inp.costBase * Math.pow(1 + cagr, yearsBefore2027);
+      }
+
+      // Pre-1 July 2027 portion: gain × 50% discount, taxed at marginal
+      const preGain = Math.max(0, val2027 - inp.costBase);
+      const preTaxable = preGain * 0.5;
+
+      // Post-1 July 2027 portion: sale - indexed val2027, min 30% tax
+      const indexedVal2027 = val2027 * Math.pow(1 + inp.avgInflation, yearsAfter2027);
+      const postRealGain = Math.max(0, inp.salePrice - indexedVal2027);
+
+      // === PRE-BUDGET tax (current rules: 50% discount on whole nominal gain) ===
+      const discountedWhole = nominalGain * 0.5;
+      const taxPre = calcTax(inp.income + discountedWhole, bBase) - calcTax(inp.income, bBase);
+
+      // === POST-BUDGET tax (split treatment) ===
+      // Pre portion: marginal rate (no min tax floor — these are pre-reform gains)
+      const taxOnPrePortion = calcTax(inp.income + preTaxable, bYear) - calcTax(inp.income, bYear);
+      // Post portion: max(marginal, 30%) on real gain
+      // The 30% floor applies to the gain itself, not the marginal rate.
+      // Marginal tax on post real gain stacked on (income + pre portion):
+      const taxOnPostMarginal = calcTax(inp.income + preTaxable + postRealGain, bYear) - calcTax(inp.income + preTaxable, bYear);
+      const taxOnPostMin = postRealGain * 0.30;
+      const taxOnPostPortion = Math.max(taxOnPostMarginal, taxOnPostMin);
+
+      const taxPost = taxOnPrePortion + taxOnPostPortion;
+
+      // Annualise the one-off difference over remaining years until sale
+      // (so the headline doesn't blow up with multi-year sales)
+      const yearsToSale = Math.max(1, inp.saleYear - inp.year - 2024);  // rough: years from now to sale
+      const totalDelta = taxPre - taxPost;
+      cgtDelta = totalDelta / Math.max(1, yearsAfter2027 || 1);
+
+      const valNote = inp.valueAt2027 > 0
+        ? `using your provided 1 July 2027 valuation of ${fmt(val2027)}`
+        : `using ATO-style growth-rate apportionment (1 July 2027 estimated value: ${fmt(val2027)})`;
+
       items.push({
         name: 'CGT on sale (annualised)',
-        detail: `Nominal gain ${fmt(nom)}. New rules: indexed cost base ${fmt(indexed)}, real gain ${fmt(real)}, 30% min tax floor. Spread over ${inp.cgHoldYears} years.`,
+        detail: `Nominal gain ${fmt(nominalGain)}, ${valNote}. Pre-2027 portion (50% discount): ${fmt(preTaxable)} taxable. Post-2027 portion (indexed cost base ${fmt(indexedVal2027)}, real gain): ${fmt(postRealGain)}, 30% min floor. Total one-off Δ ${fmt(totalDelta)} spread over ${yearsAfter2027} post-2027 years.`,
         amount: cgtDelta,
         type: cgtDelta >= 0 ? 'positive' : 'negative'
       });
